@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎉 გილოცავ დაბადების დღეს 🎂</title>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, sans-serif;
+  color: white;
+}
+
+/* DARK RED BACKGROUND */
+#bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #4b000f 0%, #120003 60%, #000000 100%);
+  z-index: -2;
+}
+
+/* VIGNETTE */
+#overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.7));
+  z-index: -1;
+}
+
+/* START */
+#start {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5em;
+  background: black;
+  z-index: 10;
+  color: #ffccd5;
+  text-align: center;
+}
+
+/* CONTENT */
+#content {
+  display: flex;
+  height: 100%;
+}
+
+/* TEXT */
+#message {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: 1.2s;
+}
+
+h1 {
+  font-size: 40px;
+  color: #fff;
+  text-shadow: 0 0 20px crimson, 0 0 40px #ff1a4d;
+}
+
+p {
+  font-size: 1.1em;
+  color: #ffd6e0;
+}
+
+/* SLIDESHOW */
+#slideshow {
+  width: 40%;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s;
+  border-radius: 15px;
+}
+
+/* FIREWORK */
+.firework {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  animation: explode 1s forwards;
+}
+
+@keyframes explode {
+  to {
+    transform: translate(var(--x), var(--y));
+    opacity: 0;
+  }
+}
+
+/* SYMBOLS */
+.symbol {
+  position: absolute;
+  font-size: 1.6em;
+  animation: floatUp 6s linear forwards;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  #content {
+    flex-direction: column;
+  }
+
+  #message {
+    width: 100%;
+    text-align: center;
+    transform: translateY(20px);
+  }
+
+  #slideshow {
+    width: 100%;
+    height: 40%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="bg"></div>
+<div id="overlay"></div>
+
+<div id="start" onclick="startExperience()">
+  ❤️ დააჭირე დასაწყებად ❤️
+</div>
+
+<div id="content">
+  
+  <div id="message">
+    <h1>🎉 გილოცავ დაბადების დღეს ჯიგარო🎂</h1>
+    <p>გისურვებ ბედნიერებას, ჯანმრთელობას და ყველაფერი კაი ✨</p>
+    <p>Luv❤️</p>
+  </div>
+
+  <div id="slideshow">
+    <img class="slide" src="photo/IMG_0446.JPG">
+    <img class="slide" src="photo/IMG_0582.JPG">
+    <img class="slide" src="photo/Изображение 326.jpg">
+  </div>
+
+</div>
+
+<script>
+let current = 0;
+let slides = document.getElementsByClassName("slide");
+let audio;
+
+function startExperience() {
+  document.getElementById("start").style.display = "none";
+
+  audio = new Audio("https://www2.cs.uic.edu/~i101/SoundFiles/HappyBirthday.mid");
+  audio.play().catch(()=>{});
+
+  setTimeout(() => {
+    let msg = document.getElementById("message");
+    msg.style.opacity = 1;
+    msg.style.transform = "translateX(0)";
+  }, 600);
+
+  showSlide();
+  setInterval(nextSlide, 3000);
+
+  setInterval(createFirework, 1000);
+  setInterval(createSymbol, 1400);
+
+  document.body.addEventListener("click", tapHearts);
+}
+
+/* SLIDES */
+function showSlide() {
+  for (let i = 0; i < slides.length; i++) {
+    slides[i].style.opacity = 0;
+  }
+  slides[current].style.opacity = 1;
+}
+
+function nextSlide() {
+  current = (current + 1) % slides.length;
+  showSlide();
+}
+
+/* FIREWORK */
+function createFirework() {
+  let x = Math.random() * window.innerWidth;
+  let y = Math.random() * window.innerHeight / 2;
+
+  for (let i = 0; i < 15; i++) {
+    let f = document.createElement("div");
+    f.className = "firework";
+    f.style.left = x + "px";
+    f.style.top = y + "px";
+
+    f.style.setProperty("--x", (Math.random()*120-60)+"px");
+    f.style.setProperty("--y", (Math.random()*120-60)+"px");
+
+    f.style.background = "#ff2a5c";
+
+    document.body.appendChild(f);
+    setTimeout(() => f.remove(), 1000);
+  }
+}
+
+/* FLOAT SYMBOLS */
+function createSymbol() {
+  const arr = ["💖","🌹","🎈"];
+  let s = document.createElement("span");
+  s.className = "symbol";
+  s.textContent = arr[Math.floor(Math.random()*arr.length)];
+  s.style.left = Math.random() * window.innerWidth + "px";
+
+  document.body.appendChild(s);
+  setTimeout(() => s.remove(), 6000);
+}
+
+/* TAP HEARTS */
+function tapHearts(e) {
+  for (let i = 0; i < 8; i++) {
+    let h = document.createElement("span");
+    h.className = "symbol";
+    h.textContent = "💖";
+    h.style.left = e.clientX + "px";
+    h.style.top = e.clientY + "px";
+
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 3000);
+  }
+}
+</script>
+
+</body>
+</html>
